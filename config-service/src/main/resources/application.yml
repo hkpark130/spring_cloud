@@ -4,9 +4,20 @@ server:
 spring:
   application:
     name: config-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: test
+    password: test
   cloud:
     config:
       server:
         git:
           uri: https://github.com/hkpark130/spring_cloud.git
 #          uri: file:///C:\Users\DIR-N-106\vagrant\spring\msa_shop
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: busrefresh, health

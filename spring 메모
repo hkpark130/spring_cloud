@@ -21,6 +21,10 @@ ribbon: 로드밸런스
 2. 로그인 시도시 "UsernamePasswordAuthenticationFilter" 상속한 'AuthenticationFilter'가 가장 먼저 실행됨
 3. UserServiceImpl 'loadUserByUsername()'
 
+rabbitmqctl add_user test test
+rabbitmqctl set_user_tags test administrator
+rabbitmqctl set_permissions -p / test ".*" ".*" ".*"
 
+rabbitmqadmin -H localhost -P 15672 -u guest -p guest list vhosts
 
 
