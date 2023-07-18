@@ -1,1 +1,3 @@
-user-service/mem/
+mem/
+.idea/
+target/
