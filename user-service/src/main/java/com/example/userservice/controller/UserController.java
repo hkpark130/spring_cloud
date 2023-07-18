@@ -30,7 +30,7 @@ public class UserController {
 
     @GetMapping("/health_check")
     public String status() {
-        return "Working!";
+        return "Working!" + env.getProperty("token.secret");
     }
 
     @GetMapping("/welcome")

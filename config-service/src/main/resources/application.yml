@@ -4,8 +4,8 @@ server:
 spring:
   application:
     name: config-service
-#  cloud:
-#    config:
-#      server:
-#
-
+  cloud:
+    config:
+      server:
+        git:
+          uri: file:///C:\Users\DIR-N-106\vagrant\spring\msa_shop
