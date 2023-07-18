@@ -1,0 +1,26 @@
+
+maven: pom.wml
+gradle: build
+
+spring cloud discovery > eureka server
+spring cloud는 spring boot가 필수
+
+mvn spring-boot:run -Dspring-boot.run.jvmArguments='-Dserver.port=9003'
+java -jar -Dserver.port=9004 ./target/user-service-0.0.1-SNAPSHOT.jar
+
+mvn cleam: 기존 (target)빌드파일 삭제
+mvn compile package: 테스트후  (target/~.jar)빌드파일 생성
+
+ribbon: 로드밸런스
+
+쿠버 로컬 클러스터 실습해보면서 다 들
+스프링도 실습, 담주까지 시간, 게이트 기능 인그레스 대처?
+
+로그인 과정
+1. 빈으로 @Configuration "WebSecurityConfigurerAdapter" 상속한 'WebSecurity' 클래스 등록됨
+2. 로그인 시도시 "UsernamePasswordAuthenticationFilter" 상속한 'AuthenticationFilter'가 가장 먼저 실행됨
+3. UserServiceImpl 'loadUserByUsername()'
+
+
+
+

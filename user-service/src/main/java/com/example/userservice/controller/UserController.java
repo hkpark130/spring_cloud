@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user-service")
+@RequestMapping("/")
 public class UserController {
     private Environment env;
     private UserService userService;
@@ -30,12 +30,12 @@ public class UserController {
 
     @GetMapping("/health_check")
     public String status() {
-        return "Working";
+        return "Working!";
     }
 
     @GetMapping("/welcome")
     public String welcome() {
-        return env.getProperty("hk.test");
+        return "welcome";
     }
 
     @PostMapping("/users")

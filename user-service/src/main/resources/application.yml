@@ -23,5 +23,16 @@ eureka:
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
 
-hk:
-  test: Welcome test.
+logging:
+  level:
+    com.example.userservice: DEBUG
+
+token:
+  expiration_time: 1000000
+  secret: user_token
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace

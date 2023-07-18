@@ -1,0 +1,78 @@
+
+nohup kubectl proxy --port=8001 --address=192.168.56.30 --accept-hosts='^*$' >/dev/null 2>&1 &
+
+Node Affinity: (required, preferred): 매치하는 라벨이 있는 노드에 pod 할당
+Node Selector: 매치하는 라벨이 있는 노드에 pod 할당
+nodeAffinity VS nodeSelector: 확장성 측면에서 nodeAffinity를 사용하는 것을 추천
+
+Pod Affinity: 매치하는 pod가 있는 노드에 pod 할당
+ *topologyKey: 노드 라벨을 확인함(podAffinity에 있음에도 불구하고)
+ *labelSelector: podAffinity에서 파드 라벨을 확인함(topologyKey와 다름)
+
+Pod Anti-Affinity: 매치하는 pod가 없는 노드에 pod 할당
+ *podAntiAffinity로 HA를 위한 Master/Slave 분리
+
+Toleration/Taint: 
+컨트롤 플레인<-(기본 "NoSchedule Taint"가 걸려있음)
+--
+pod 를 위한 IP대역: 20.
+svc 를 위한 IP대역: 10.
+
+nodeport만 하면 하나의 노드 지정해서 통신가능한데 노드 바뀌면?
+"clusterIP: None" => (headless)
+
+{
+kind: Service
+metadata:
+  name: clusterip1 # 이게 DNS가 됨!
+}
+
+StorageClass: pv 동적 생성(해당 storageClassName으로 pvc만들면 동적으로 pv 만들고 연결)
+
+kubectl config: kubecongig에 contexts 선택
+
+grep 'client-certificate-data' /etc/kubernetes/admin.conf | head -n 1 | awk '{print $2}' | base64 -d
+grep 'client-key-data' /etc/kubernetes/admin.conf | head -n 1 | awk '{print $2}' | base64 -d
+curl -k --key ./Client.key --cert ./Client.crt https://192.168.56.30:6443/api/v1/nodes
+
+NS를 만들면 Default SA와 Secret이 만들어짐
+Role: NS 내에서만 유효/ clusterRole
+
+ReplicaSet: Stateless
+StatefulSet: Stateful (volumeClaimTemplates => pvc 동적 생성), 각자 pvc,pv가짐
+
+pvc 노드 문제: https://kubernetes.io/ko/docs/concepts/storage/persistent-volumes/#%EC%A0%91%EA%B7%BC-%EB%AA%A8%EB%93%9C
+
+ingress: (서비스 LB[path, host 별로 구분], canary)
+
+CA: 클러스터 노드 증가
+
+Pause Container: 파드 네트워크
+Network Plugin: 클러스터 네트워크(cni, kubenet)
+
+CNI: 같은 노드의 파드간의 통신, 타노드의 파드와의 통신
+1. 서비스 생성시 kube-dns에 (ip,dns)등록
+2. api는 kube-proxy에 서비스가 어느 ip(pod)에 연결되었는지 저장
+3. kube-proxy에 서비스를 pod IP로 바꾸는 NAT 기능
+
+pod가 svc 호출시> 
+1. kube-dns에서 SVC IP 취득
+2. kube-proxy에서 어느 ip로 가야하는지 확인
+3. CNI로 해당 ip(pod)로 트래픽
+
+POD 네트워크
+1. CNI(Route층에서 IP대역 확인)
+2. CNI(다른 노드 대역에 있으면 Overlay층으로 가서 타노드 IP로 변환[인캡슐]{IPIP})
+3. 다른노드
+
+SVC 네트워크(ClusterIP)
+1. CNI(Route층의 NAT으로 SVC ip를 POD ip로 변환)
+2. 나머진 POD 네트워크와 동일
+
+SVC 네트워크(NodePort)
+1. kube-proxy가 노드에 3만번대 포트 염
+2. 트래픽이 오면 iptables를 통해 CNI Route층의 NAT으로 IP변환
+3. 나머진 POD 네트워크와 동일
+
+pause 컨테이너가 pod ip 설정
+
