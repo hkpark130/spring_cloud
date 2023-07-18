@@ -1,0 +1,12 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem/test
+    username: sa
+    password: '{cipher}5c771c05f871fcfbaf1425559c2a818e84801cfe6b05b2b41afc90512f1e4f2e'
