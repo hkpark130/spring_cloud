@@ -58,11 +58,11 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(orders);
     }
 
-    @GetMapping("/orders/{orderId}")
-    public ResponseEntity<ResponseOrder> getOrderByOrderId(@PathVariable("orderId") String orderId) {
-        OrderDto orderDto = orderService.getOrderByOrderId(orderId);
-        ResponseOrder responseOrder = new ModelMapper().map(orderDto, ResponseOrder.class);
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseOrder);
-    }
+//    @GetMapping("/orders/{orderId}")
+//    public ResponseEntity<ResponseOrder> getOrderByOrderId(@PathVariable("orderId") String orderId) {
+//        OrderDto orderDto = orderService.getOrderByOrderId(orderId);
+//        ResponseOrder responseOrder = new ModelMapper().map(orderDto, ResponseOrder.class);
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(responseOrder);
+//    }
 }
