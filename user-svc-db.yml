@@ -13,5 +13,5 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem/test;MODE=MYSQL
-    username: sa
-    password: '{cipher}5c771c05f871fcfbaf1425559c2a818e84801cfe6b05b2b41afc90512f1e4f2e'
+    username: sa2
+    password: sasa
