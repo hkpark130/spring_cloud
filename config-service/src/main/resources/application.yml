@@ -8,4 +8,5 @@ spring:
     config:
       server:
         git:
-          uri: file:///C:\Users\DIR-N-106\vagrant\spring\msa_shop
+          uri: https://github.com/hkpark130/spring_cloud.git
+#          uri: file:///C:\Users\DIR-N-106\vagrant\spring\msa_shop
