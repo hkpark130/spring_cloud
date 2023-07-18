@@ -6,10 +6,12 @@ spring:
         web-allow-others: true
       path: /h2-console
   jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show_sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem/test
+    url: jdbc:h2:mem/test;MODE=MYSQL
     username: sa
     password: '{cipher}5c771c05f871fcfbaf1425559c2a818e84801cfe6b05b2b41afc90512f1e4f2e'
