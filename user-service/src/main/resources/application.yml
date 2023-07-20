@@ -9,16 +9,16 @@ spring:
     port: 5672
     username: test
     password: test
-#  h2:
-#    console:
-#      enabled: true
-#      settings:
-#        web-allow-others: true
-#      path: /h2-console
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem/test
-##    username: sa
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem/test
+#    username: sa
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
@@ -30,14 +30,14 @@ eureka:
 
 logging:
   level:
-    com.example.userservice: DEBUG
+    com.example.userservice.client: DEBUG
 
 token:
-  expiration_time: 1000000
+  expiration_time: 864000000
   secret: user_token
 
 management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, httptrace, busrefresh
+        include: "*"

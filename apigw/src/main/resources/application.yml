@@ -1,0 +1,107 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: apigw
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: test
+    password: test
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter # class?? ??
+          args:
+            baseMsg: HKHKHKHK 222222 1111
+      routes:
+#        - id: first-service
+#          uri: lb://FIRST-SERVICE
+#          predicates:
+#            - Path=/first-service/**
+#          filters:
+##            - AddRequestHeader=first-request, first-request-header2
+##            - AddResponseHeader=first-response, first-response-header2
+#            - CustomFilter
+#        - id: second-service
+#          uri: lb://SECOND-SERVICE
+#          predicates:
+#            - Path=/second-service/**
+#          filters:
+##            - AddRequestHeader=second-request, second-request-header2
+##            - AddResponseHeader=second-response, second-response-header2
+#            - CustomFilter
+
+#        - id: user-service
+#          uri: lb://USER-SERVICE
+#          predicates:
+#            - Path=/user-service/**
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}/
+            - CustomFilter
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}/
+            - CustomFilter
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/health_check
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}/
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/actuator/**
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}/
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}/
+            - AuthorizationHeaderFilter
+        - id: catalog-service
+          uri: lb://CATALOG-SERVICE
+          predicates:
+            - Path=/catalog-service/**
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order-service/**
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+token:
+  secret: user_token
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace, busrefresh
