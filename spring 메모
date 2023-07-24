@@ -34,26 +34,6 @@ plugin.path=/home/vagrant/confluentinc-kafka-connect-jdbc-10.7.3/lib
 connector sink == consumer 역할
 connector source == producer 역할
 
-docker-compose run --rm kafka kafka-topics --create --topic quickstart-avro-offsets --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:32181 --config cleanup.policy=compact
-docker-compose run --rm kafka kafka-topics --create --topic quickstart-avro-config --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:32181 --config cleanup.policy=compact
-docker-compose run --rm kafka kafka-topics --create --topic quickstart-avro-status --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:32181 --config cleanup.policy=compact
-
-CREATE DATABASE IF NOT EXISTS connect_test;
-USE connect_test;
-
-CREATE TABLE IF NOT EXISTS test (
-  id serial NOT NULL PRIMARY KEY,
-  name varchar(100),
-  email varchar(200),
-  department varchar(200),
-  modified timestamp default CURRENT_TIMESTAMP NOT NULL,
-  INDEX `modified_index` (`modified`)
-);
-
-INSERT INTO test (name, email, department) VALUES ('alice', 'alice@abc.com', 'engineering');
-INSERT INTO test (name, email, department) VALUES ('bob', 'bob@abc.com', 'sales');
-INSERT INTO test (name, email, department) VALUES ("q", "w", "e"); 
-
 /bin/kafka-topics --bootstrap-server localhost:9092 --list
 /bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic quickstart-jdbc-test --from-beginning
 

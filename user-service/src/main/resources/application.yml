@@ -4,11 +4,11 @@ server:
 spring:
   application:
     name: user-service
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: test
-    password: test
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: test
+#    password: test
   h2:
     console:
       enabled: true
@@ -40,4 +40,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "*" # info, metrics, prometheus
