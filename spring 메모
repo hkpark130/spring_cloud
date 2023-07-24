@@ -56,5 +56,19 @@ INSERT INTO test (name, email, department) VALUES ("q", "w", "e");
 
 /bin/kafka-topics --bootstrap-server localhost:9092 --list
 /bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic quickstart-jdbc-test --from-beginning
+/bin/connect-distributed /etc/kafka/connect-distributed.properties
+/bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic orders --from-beginning
 
+docker run -d -p 9411:9411 openzipkin/zipkin
+hystrix
+
+mvn clean compile package -Dmaven.test.skip=true
+
+트랜잭션(ACID)
+
+질문
+자바버전, 데이터 동기화, 깃랩권한, msa정규화, 
+
+docker rm $(docker ps -a -q)
+fsutil file createnew test 1048576
 

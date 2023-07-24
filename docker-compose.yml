@@ -12,6 +12,8 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - my-network
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
@@ -19,6 +21,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - my-network
 
   broker:
     image: confluentinc/cp-kafka:7.0.1
@@ -37,6 +41,8 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    networks:
+      - my-network
 
   connector:
     image: confluentinc/cp-kafka-connect:7.0.1
@@ -63,4 +69,83 @@ services:
       CONNECT_PLUGIN_PATH: "/usr/share/java,/etc/kafka-connect/jars"
     volumes:
       - ./jars:/etc/kafka-connect/jars
+    networks:
+      - my-network
 
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks: 
+      - my-network
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - 15671:15671
+      - 15672:15672
+      - 5671:5671
+      - 5672:5672
+      - 4369:4369
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - my-network
+
+  config-service:
+    build: 
+      context: ./config-service
+    ports:
+      - "8888:8888"
+    environment:
+      spring.rabbitmq.host: rabbitmq
+      spring.profiles.active: default
+    depends_on: 
+      - rabbitmq
+    networks:
+      - my-network
+
+  discovery-service:
+    build:
+      context: ./discovery-service
+    ports:
+      - "8761:8761"
+    environment:
+      spring.cloud.config.uri: http://config-service:8888
+    depends_on: 
+      - config-service
+    networks:
+      - my-network
+
+  apigw:
+    build:
+      context: ./apigw
+    ports:
+      - "8080:8080"
+    environment:
+      spring.cloud.config.uri: http://config-service:8888
+      spring.rabbitmq.host: rabbitmq
+      eureka.client.serviceUrl.defaultZone: http://discovery-service:8761/eureka/
+    depends_on: 
+      - discovery-service
+    networks:
+      - my-network
+  
+  user-service:
+    build:
+      context: ./user-service
+    environment:
+      spring.cloud.config.uri: http://config-service:8888
+      spring.rabbitmq.host: rabbitmq
+      spring.zipkin.base-url: http://zipkin:9411
+      eureka.client.serviceUrl.defaultZone: http://discovery-service:8761/eureka/
+      logging.file: /api-logs/users-ws.log
+    depends_on: 
+      - apigw
+    networks: 
+      - my-network
+  
+networks:
+  my-network:
+    driver: bridge
