@@ -25,8 +25,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception { // 권한 configure
         http.csrf().disable();
-        // http.authorizeRequests().antMatchers("/actuator/**").permitAll();
-        // http.authorizeRequests().antMatchers("/**").permitAll();
+        http.authorizeRequests().antMatchers("/actuator/**").permitAll();
+        http.authorizeRequests().antMatchers("/login/**").permitAll();
+        http.authorizeRequests().antMatchers("/health_check/**").permitAll();
+//        http.authorizeRequests().antMatchers("/**").permitAll();
         http.authorizeRequests().antMatchers("/**")
                 .hasIpAddress("apigw")
                 .and()

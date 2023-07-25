@@ -4,11 +4,11 @@ server:
 spring:
   application:
     name: apigw
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: test
-    password: test
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: test
+#    password: test
   cloud:
     gateway:
       default-filters:
@@ -104,4 +104,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, httptrace, busrefresh
+        include: refresh, health, beans, httptrace, busrefresh, info, metrics, prometheus
