@@ -47,8 +47,23 @@ mvn clean compile package -Dmaven.test.skip=true
 트랜잭션(ACID)
 
 질문
-자바버전, 데이터 동기화, 깃랩권한, msa정규화, 
+데이터 동기화, 깃랩권한, msa정규화, 
 
 docker rm $(docker ps -a -q)
 fsutil file createnew test 1048576
+
+스프링 컨테이너: 
+스프링 빈은 무상태를 유지해야함! (지역변수)
+
+vm-> nova
+object Storage-> swift
+vm Img-> glance
+keystone
+web IF-> Horizon
+Block(disk) Storage-> cinder
+Neutron
+
+여름휴가?, 
+Configuration, Component
+
 
